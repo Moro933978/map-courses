@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كورس الخرائط</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Cairo:wght@200..1000&family=Jaro:opsz@6..72&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <style>
+        :root{
+    --prymary-color: #000000;
+    --seconde-prymary: #ebebeb;
+    --main-color: rgb(0, 102, 255);
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'cairo', sans-serif;
+    scroll-behavior: smooth;
+}   
+
+body{
+    margin: 0;
+    padding: 0;
+    background-image: linear-gradient(90deg, 
+
+    #bdc3c7
+    ,
+    #2c3e50
+    );
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    direction: rtl;
+}
+
+
+main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+    margin-top: 150px;
+}
+
+iframe{
+    border-radius: 6px;
+    width: 410px;
+    height: 220px;
+    margin-top: 15px;
+    transition: all .5s ease .3s;
+    box-shadow: 12px 12px 12px rgba(0, 0, 0, 0.705);
+    -webkit-transition: all .5s ease .3s;
+    -moz-transition: all .5s ease .3s;
+    -ms-transition: all .5s ease .3s;
+    -o-transition: all .5s ease .3s;
+    margin: 14px;
+    cursor: pointer;
+}
+
+iframe:hover{
+    box-shadow: 16px 16px 16px rgba(0, 0, 0, 0.705);
+    transform: scale(1.1, 1.1);
+}
+
+main div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+@media (max-width: 768px) {
+    iframe{
+        max-width: 310px;
+        height: 190px;
+    }
+}
+    </style>
+            <main>
+                <h2 style="font-size: 40px; color: #fff;">كورس الخرائط</h2>
+                <div id="container">
+                    
+                </div>
+            </main>
+    <script>
+        const apiKey = "AIzaSyA-3G-AfUZ4eryEXZI7mLqoJod-oXk1Ruc";
+
+const playlistId = "PLSLDtLMKMGngSQkX_cgsJO3VfXgA5i3uJ";
+
+const apiURL = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playlistId}&maxResults=888&key=${apiKey}`;
+
+async function fetchVideos() {
+    try {
+        const response = await fetch(apiURL);
+
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status} - ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        // Debugging: Log API response to console
+        console.log("API Response:", data);
+
+        const videosContainer = document.getElementById('container');
+
+        if (data.items.length === 0) {
+            throw new Error("No videos found in the playlist.");
+        }
+
+        // Embed videos
+        data.items.forEach(item => {
+            const videoId = item.snippet.resourceId.videoId;
+
+            const iframe = document.createElement('iframe');
+            iframe.src = `https://www.youtube.com/embed/${videoId}`;
+            iframe.width = "560";
+            iframe.height = "315";
+            iframe.frameBorder = "0";
+            iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+            iframe.allowFullscreen = true;
+
+            videosContainer.appendChild(iframe);
+        });
+    } catch (error) {
+        console.error("Error fetching videos:", error);
+
+        const errorMessage = document.createElement('p');
+        errorMessage.textContent = `Unable to fetch playlist videos: ${error.message}`;
+        document.getElementById('container').appendChild(errorMessage);
+    }
+}
+
+fetchVideos();
+
+    </script>
+</body>
+</html>
